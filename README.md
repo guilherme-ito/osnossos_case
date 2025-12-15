@@ -13,16 +13,16 @@ osnossos_case/
 
 ## 🎯 Tarefas do Case
 
+### ✅ Tarefa 1: App Mobile (COMPLETA)
+- **Tecnologias**: Ionic, Angular
+- **Status**: ✅ Implementada e testada
+- **Documentação**: Ver [mobile/README.md](mobile/README.md)
+
 ### ✅ Tarefa 2: API Symfony (COMPLETA)
 - **Tecnologias**: Symfony 6.4, Doctrine ORM, MySQL
 - **Arquitetura**: Clean Architecture
 - **Status**: ✅ Implementada e testada
 - **Documentação**: Ver [api/README.md](api/README.md)
-
-### ✅ Tarefa 1: App Mobile (COMPLETA)
-- **Tecnologias**: Ionic, Angular
-- **Status**: ✅ Implementada e testada
-- **Documentação**: Ver [mobile/README.md](mobile/README.md)
 
 ### ✅ Tarefa 3: Site Web (COMPLETA)
 - **Tecnologias**: Next.js, Prisma, Shadcn UI

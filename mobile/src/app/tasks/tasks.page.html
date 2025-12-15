@@ -1,0 +1,127 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Minhas Tarefas
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleDarkMode()" fill="clear">
+        <ion-icon [name]="isDarkMode ? 'sunny' : 'moon'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Minhas Tarefas</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-refresher slot="fixed" (ionRefresh)="refreshTasks($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Campo de Busca -->
+  <ion-searchbar
+    [(ngModel)]="searchQuery"
+    (ionInput)="onSearchChange($event)"
+    placeholder="Buscar tarefas..."
+    debounce="300"
+    class="searchbar-custom">
+  </ion-searchbar>
+
+  <!-- Filtro por -->
+  <ion-item>
+    <ion-label>Filtrar por:</ion-label>
+    <ion-select [(ngModel)]="filterBy" (ionChange)="onFilterChange($event)" interface="popover">
+      <ion-select-option value="all">Todas</ion-select-option>
+      <ion-select-option value="favorites">⭐ Favoritas</ion-select-option>
+      <ion-select-option value="overdue">⚠️ Vencidas</ion-select-option>
+      <ion-select-option value="pending">Pendentes</ion-select-option>
+      <ion-select-option value="in_progress">Em Andamento</ion-select-option>
+      <ion-select-option value="completed">Concluídas</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <!-- Seletor de Ordenação -->
+  <ion-item>
+    <ion-label>Ordenar por:</ion-label>
+    <ion-select [(ngModel)]="sortBy" (ionChange)="onSortChange($event)" interface="popover">
+      <ion-select-option value="date_desc">Data (Mais Recente)</ion-select-option>
+      <ion-select-option value="date_asc">Data (Mais Antiga)</ion-select-option>
+      <ion-select-option value="title_asc">Título (A-Z)</ion-select-option>
+      <ion-select-option value="title_desc">Título (Z-A)</ion-select-option>
+      <ion-select-option value="updated_desc">Atualização (Mais Recente)</ion-select-option>
+      <ion-select-option value="updated_asc">Atualização (Mais Antiga)</ion-select-option>
+    </ion-select>
+  </ion-item>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner></ion-spinner>
+    <p>Carregando tarefas...</p>
+  </div>
+
+  <ion-list *ngIf="!isLoading">
+    <ion-item *ngFor="let task of filteredTasks" [button]="true" (click)="navigateToEdit(task)">
+      <ion-label>
+        <h2>
+          <span *ngIf="task.isFavorite" style="color: gold;">⭐ </span>{{ task.title }}
+        </h2>
+        <p *ngIf="task.description">{{ task.description }}</p>
+        <div class="task-meta" style="margin: 8px 0 4px 0;">
+          <p style="margin: 4px 0;">
+            <ion-badge 
+              [color]="getStatusColor(task.status)"
+              (click)="changeStatus(task, $event)"
+              style="cursor: pointer; user-select: none;">
+              {{ getStatusLabel(task.status) }}
+            </ion-badge>
+          </p>
+          <p class="date" style="margin: 4px 0; font-size: 0.85em; color: #666;">
+            Criada em: {{ formatDate(task.createdAt) }}
+          </p>
+          <p *ngIf="task.dueDate" [style.color]="isOverdue(task) ? 'red' : 'inherit'" style="margin: 4px 0; font-size: 0.9em;">
+            📅 Vence: {{ formatDate(task.dueDate) }}
+            <span *ngIf="isOverdue(task)" style="font-weight: bold;"> (Vencida!)</span>
+          </p>
+        </div>
+      </ion-label>
+      <ion-buttons slot="end">
+        <ion-button 
+          *ngIf="task.status !== 'completed'"
+          (click)="toggleStatus(task); $event.stopPropagation()" 
+          fill="clear"
+          color="success">
+          <ion-icon name="checkmark-circle"></ion-icon>
+        </ion-button>
+        <ion-button 
+          (click)="navigateToEdit(task); $event.stopPropagation()" 
+          fill="clear"
+          color="primary">
+          <ion-icon name="create"></ion-icon>
+        </ion-button>
+        <ion-button 
+          (click)="deleteTask(task); $event.stopPropagation()" 
+          fill="clear"
+          color="danger">
+          <ion-icon name="trash"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+
+    <ion-item *ngIf="filteredTasks.length === 0">
+      <ion-label class="ion-text-center">
+        <h2>Nenhuma tarefa encontrada</h2>
+        <p *ngIf="searchQuery">Nenhuma tarefa corresponde à busca "{{ searchQuery }}"</p>
+        <p *ngIf="!searchQuery">Toque no botão + para criar uma nova tarefa</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="navigateToCreate()" color="primary">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

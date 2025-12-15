@@ -1,0 +1,8 @@
+framework:
+    serializer:
+        enabled: true
+        default_context:
+            groups: ['api']
+
+
+

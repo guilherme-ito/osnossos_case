@@ -1,0 +1,25 @@
+parameters:
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/*'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    # Repository interfaces
+    App\Domain\Repository\TaskRepositoryInterface:
+        alias: App\Infrastructure\Repository\TaskRepository
+
+    # Event Listeners
+    App\EventListener\CorsListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.response }
+
+
+

@@ -143,19 +143,3 @@ api/
 - [API - README](api/README.md) - Documentação completa da API
 - [API - Exemplos](api/API_EXAMPLES.md) - Exemplos de requisições
 
-## 🧪 Testes
-
-A API foi testada e validada com todos os endpoints funcionando corretamente:
-- ✅ CRUD completo
-- ✅ Validações
-- ✅ Filtros por status
-- ✅ Tratamento de erros
-- ✅ Timestamps automáticos
-
-## 📄 Licença
-
-MIT
-
-## 👥 Contribuição
-
-Este é um projeto de case técnico para OSNOSSOS.
